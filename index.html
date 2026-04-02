@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>狩猟免許 過去問アプリ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+      background: #f0f4f0;
+      color: #333;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(135deg, #2d5016, #4a7c28);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    header h1 { font-size: 1.4em; }
+    header p { font-size: 0.85em; opacity: 0.85; margin-top: 4px; }
+    .container { max-width: 700px; margin: 0 auto; padding: 16px; }
+
+    /* Start screen */
+    .start-screen { text-align: center; padding: 24px 16px; }
+    .start-screen .icon { font-size: 3.5em; margin-bottom: 12px; }
+    .start-screen h2 { font-size: 1.2em; margin-bottom: 16px; }
+
+    /* Genre cards */
+    .genre-grid { display: flex; flex-direction: column; gap: 12px; }
+    .genre-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.15s;
+      border-left: 5px solid #4a7c28;
+    }
+    .genre-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+    .genre-card:active { transform: scale(0.98); }
+    .genre-card h3 { font-size: 1.05em; margin-bottom: 4px; color: #2d5016; }
+    .genre-card .meta { font-size: 0.8em; color: #888; }
+
+    /* Mode selection */
+    .mode-screen { text-align: center; padding: 20px; }
+    .mode-screen h2 { font-size: 1.1em; margin-bottom: 16px; }
+    .mode-buttons { display: flex; flex-direction: column; gap: 10px; max-width: 320px; margin: 0 auto; }
+    .btn-back { margin-top: 12px; }
+
+    /* Buttons */
+    .btn {
+      display: block; width: 100%; padding: 13px 20px;
+      border: none; border-radius: 10px; font-size: 1em; font-weight: 600;
+      cursor: pointer; transition: transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: linear-gradient(135deg, #2d5016, #4a7c28); color: #fff; box-shadow: 0 3px 8px rgba(45,80,22,0.3); }
+    .btn-secondary { background: #fff; color: #2d5016; border: 2px solid #2d5016; }
+    .btn-outline { background: transparent; color: #2d5016; border: 2px solid #ccc; }
+
+    /* Quiz card */
+    .quiz-card {
+      background: #fff; border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 24px; margin-bottom: 16px;
+    }
+    .progress-bar { background: #e0e0e0; border-radius: 6px; height: 8px; margin-bottom: 16px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #4a7c28, #6dab3c); border-radius: 6px; transition: width 0.3s ease; }
+    .question-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .question-num { font-size: 0.85em; color: #888; font-weight: 600; }
+    .category-tag { font-size: 0.75em; background: #e8f5e9; color: #2d5016; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+    .question-text { font-size: 1.05em; line-height: 1.7; margin-bottom: 20px; font-weight: 500; }
+
+    /* Choices */
+    .choices { display: flex; flex-direction: column; gap: 10px; }
+    .choice-btn {
+      display: flex; align-items: flex-start; gap: 12px;
+      width: 100%; padding: 14px 16px; background: #fafafa;
+      border: 2px solid #e0e0e0; border-radius: 10px;
+      font-size: 0.95em; line-height: 1.6; text-align: left;
+      cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    }
+    .choice-btn:hover:not(.disabled) { border-color: #4a7c28; background: #f0f8e8; }
+    .choice-btn .label {
+      flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+      background: #e0e0e0; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85em; margin-top: 2px;
+    }
+    .choice-btn.correct { border-color: #4caf50; background: #e8f5e9; }
+    .choice-btn.correct .label { background: #4caf50; color: #fff; }
+    .choice-btn.wrong { border-color: #ef5350; background: #ffebee; }
+    .choice-btn.wrong .label { background: #ef5350; color: #fff; }
+    .choice-btn.disabled { cursor: default; opacity: 0.7; }
+    .choice-btn.disabled.correct, .choice-btn.disabled.wrong { opacity: 1; }
+
+    .explanation {
+      margin-top: 16px; padding: 16px; background: #f5f9f0;
+      border-left: 4px solid #4a7c28; border-radius: 0 8px 8px 0;
+      font-size: 0.9em; line-height: 1.7; color: #444; animation: fadeIn 0.3s;
+    }
+    .explanation strong { color: #2d5016; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    .next-area { margin-top: 16px; text-align: center; }
+
+    /* Result */
+    .result-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 32px 24px; text-align: center; }
+    .score-circle {
+      width: 140px; height: 140px; border-radius: 50%;
+      margin: 0 auto 20px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; font-weight: 700;
+    }
+    .score-circle .num { font-size: 2.8em; line-height: 1; }
+    .score-circle .den { font-size: 0.95em; opacity: 0.8; }
+    .score-high { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); color: #2d5016; }
+    .score-mid { background: linear-gradient(135deg, #fff8e1, #ffecb3); color: #f57f17; }
+    .score-low { background: linear-gradient(135deg, #ffebee, #ffcdd2); color: #c62828; }
+    .result-msg { font-size: 1.1em; font-weight: 600; margin-bottom: 6px; }
+    .result-detail { color: #888; font-size: 0.9em; margin-bottom: 24px; }
+    .result-buttons { display: flex; flex-direction: column; gap: 10px; }
+
+    .review-item {
+      background: #fff; border-radius: 10px; padding: 16px;
+      margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .review-item .ri-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .review-item .ri-result { font-size: 0.8em; font-weight: 700; padding: 2px 10px; border-radius: 20px; }
+    .ri-correct { background: #e8f5e9; color: #2e7d32; }
+    .ri-wrong { background: #ffebee; color: #c62828; }
+    .review-item .ri-q { font-size: 0.9em; line-height: 1.5; margin-bottom: 6px; }
+    .review-item .ri-exp { font-size: 0.82em; color: #666; line-height: 1.5; }
+
+    .hidden { display: none !important; }
+    .loading { text-align: center; padding: 40px; color: #888; }
+    footer { text-align: center; padding: 20px; font-size: 0.75em; color: #aaa; }
+    footer a { color: #4a7c28; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>狩猟免許 過去問アプリ</h1>
+  <p id="headerSub">4ジャンル 全356問</p>
+</header>
+
+<div class="container">
+  <!-- Start Screen -->
+  <div id="startScreen" class="start-screen">
+    <div class="icon">🦌</div>
+    <h2>ジャンルを選んでください</h2>
+    <div class="genre-grid">
+      <div class="genre-card" onclick="selectGenre('type1')">
+        <h3>第一種狩猟 過去問</h3>
+        <div class="meta" id="type1Count">読み込み中...</div>
+      </div>
+      <div class="genre-card" onclick="selectGenre('animals')">
+        <h3>鳥獣識別イラスト</h3>
+        <div class="meta" id="animalsCount">読み込み中...</div>
+      </div>
+      <div class="genre-card" onclick="selectGenre('examination')">
+        <h3>猟銃等講習会 考査問題</h3>
+        <div class="meta" id="examinationCount">読み込み中...</div>
+      </div>
+      <div class="genre-card" onclick="selectGenre('wana')">
+        <h3>わな猟 過去問</h3>
+        <div class="meta" id="wanaCount">読み込み中...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mode Screen -->
+  <div id="modeScreen" class="mode-screen hidden">
+    <h2 id="modeTitle"></h2>
+    <div class="mode-buttons">
+      <button class="btn btn-primary" onclick="startQuiz('all')">全問チャレンジ</button>
+      <button class="btn btn-secondary" onclick="startQuiz('random20')">ランダム20問</button>
+      <button class="btn btn-secondary" onclick="startQuiz('random10')">ランダム10問</button>
+      <button class="btn btn-outline" onclick="startQuiz('random5')">サクッと5問</button>
+      <button class="btn btn-outline btn-back" onclick="goHome()">ジャンル選択に戻る</button>
+    </div>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="quizScreen" class="hidden">
+    <div class="quiz-card">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="question-meta">
+        <span class="question-num" id="questionNum"></span>
+        <span class="category-tag" id="categoryTag"></span>
+      </div>
+      <div class="question-text" id="questionText"></div>
+      <div class="choices" id="choices"></div>
+      <div class="explanation hidden" id="explanation"></div>
+      <div class="next-area hidden" id="nextArea">
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">次の問題へ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Screen -->
+  <div id="resultScreen" class="hidden">
+    <div class="result-card">
+      <div class="score-circle" id="scoreCircle">
+        <span class="num" id="scoreNum"></span>
+        <span class="den" id="scoreDen"></span>
+      </div>
+      <div class="result-msg" id="resultMsg"></div>
+      <div class="result-detail" id="resultDetail"></div>
+      <div class="result-buttons">
+        <button class="btn btn-primary" onclick="startQuiz('retry')">同じ問題でもう一度</button>
+        <button class="btn btn-secondary" onclick="showReview()">解答を振り返る</button>
+        <button class="btn btn-outline" onclick="goHome()">トップに戻る</button>
+      </div>
+    </div>
+    <div id="reviewArea" class="hidden" style="margin-top:20px;"></div>
+  </div>
+</div>
+
+<footer>
+  出典: <a href="https://www.shuryo-menkyo.com/" target="_blank">狩猟免許.com</a>
+</footer>
+
+<script>
+const DATA = {};
+const GENRE_INFO = {
+  type1:       { file: 'data/type1.json',       name: '第一種狩猟 過去問',     el: 'type1Count' },
+  animals:     { file: 'data/animals.json',      name: '鳥獣識別イラスト',       el: 'animalsCount' },
+  examination: { file: 'data/examination.json',  name: '猟銃等講習会 考査問題',  el: 'examinationCount' },
+  wana:        { file: 'data/wana.json',         name: 'わな猟 過去問',          el: 'wanaCount' }
+};
+
+// Load all data
+let totalQ = 0;
+Promise.all(Object.entries(GENRE_INFO).map(([key, info]) =>
+  fetch(info.file).then(r => r.json()).then(data => {
+    // Normalize examination questions
+    if (key === 'examination') {
+      data = data.map(q => ({
+        category: q.category || '猟銃等講習会',
+        question: q.question,
+        choices: q.choices || ['○', '×'],
+        answer: q.answer,
+        explanation: q.explanation || ''
+      }));
+    }
+    DATA[key] = data;
+    document.getElementById(info.el).textContent = `${data.length}問`;
+    totalQ += data.length;
+  })
+)).then(() => {
+  document.getElementById('headerSub').textContent = `4ジャンル 全${totalQ}問`;
+});
+
+let currentGenre = '';
+let currentQuiz = [];
+let currentIndex = 0;
+let score = 0;
+let answers = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function selectGenre(genre) {
+  currentGenre = genre;
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('modeScreen').classList.remove('hidden');
+  const info = GENRE_INFO[genre];
+  document.getElementById('modeTitle').textContent = `${info.name}（${DATA[genre].length}問）`;
+}
+
+function startQuiz(mode) {
+  const pool = DATA[currentGenre];
+  if (mode === 'retry') {
+    // keep currentQuiz
+  } else if (mode === 'all') {
+    currentQuiz = shuffle(pool);
+  } else if (mode === 'random20') {
+    currentQuiz = shuffle(pool).slice(0, 20);
+  } else if (mode === 'random10') {
+    currentQuiz = shuffle(pool).slice(0, 10);
+  } else if (mode === 'random5') {
+    currentQuiz = shuffle(pool).slice(0, 5);
+  }
+  currentIndex = 0;
+  score = 0;
+  answers = [];
+  hideAll();
+  document.getElementById('quizScreen').classList.remove('hidden');
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = currentQuiz[currentIndex];
+  const total = currentQuiz.length;
+  document.getElementById('progressFill').style.width = ((currentIndex / total) * 100) + '%';
+  document.getElementById('questionNum').textContent = `問題 ${currentIndex + 1} / ${total}`;
+  document.getElementById('categoryTag').textContent = q.category || '';
+  document.getElementById('questionText').textContent = q.question;
+  document.getElementById('explanation').classList.add('hidden');
+  document.getElementById('nextArea').classList.add('hidden');
+
+  const labels = q.choices.length === 2 ? ['○', '×'] : ['ア', 'イ', 'ウ'];
+  // For examination (○×), use the actual choices
+  const choiceLabels = q.choices.length === 2 ? ['○', '×'] : ['ア', 'イ', 'ウ'];
+
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  q.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    if (q.choices.length === 2) {
+      btn.innerHTML = `<span class="label">${choiceLabels[i]}</span><span>${c === '○' || c === '×' ? '' : c}</span>`;
+    } else {
+      btn.innerHTML = `<span class="label">${choiceLabels[i]}</span><span>${c}</span>`;
+    }
+    btn.onclick = () => selectAnswer(i);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(selected) {
+  const q = currentQuiz[currentIndex];
+  const btns = document.querySelectorAll('.choice-btn');
+  const isCorrect = selected === q.answer;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    btn.onclick = null;
+    if (i === q.answer) btn.classList.add('correct');
+    if (i === selected && !isCorrect) btn.classList.add('wrong');
+  });
+
+  if (isCorrect) score++;
+  answers.push({ question: q, selected, isCorrect });
+
+  const expEl = document.getElementById('explanation');
+  const expText = q.explanation || '';
+  expEl.innerHTML = `<strong>${isCorrect ? '正解!' : '不正解...'}</strong> ${expText}`;
+  expEl.classList.remove('hidden');
+
+  const nextArea = document.getElementById('nextArea');
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.textContent = currentIndex < currentQuiz.length - 1 ? '次の問題へ' : '結果を見る';
+  nextArea.classList.remove('hidden');
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex < currentQuiz.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  hideAll();
+  document.getElementById('resultScreen').classList.remove('hidden');
+  document.getElementById('reviewArea').classList.add('hidden');
+
+  const total = currentQuiz.length;
+  const pct = Math.round((score / total) * 100);
+  const circle = document.getElementById('scoreCircle');
+  circle.className = 'score-circle ' + (pct >= 70 ? 'score-high' : pct >= 40 ? 'score-mid' : 'score-low');
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('scoreDen').textContent = `/ ${total}問`;
+
+  let msg, detail;
+  if (pct >= 90) { msg = '素晴らしい!'; detail = '合格ラインを余裕でクリア!'; }
+  else if (pct >= 70) { msg = '合格ライン!'; detail = 'あと少しで満点です!'; }
+  else if (pct >= 50) { msg = 'もう少し!'; detail = '間違えた問題を復習しましょう。'; }
+  else { msg = 'がんばりましょう!'; detail = '解説をよく読んで復習しましょう。'; }
+
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultDetail').textContent = `正答率 ${pct}% - ${detail}`;
+}
+
+function showReview() {
+  const area = document.getElementById('reviewArea');
+  if (!area.classList.contains('hidden')) { area.classList.add('hidden'); return; }
+
+  area.innerHTML = answers.map((a, i) => {
+    const labels = a.question.choices.length === 2 ? ['○', '×'] : ['ア', 'イ', 'ウ'];
+    return `
+    <div class="review-item">
+      <div class="ri-header">
+        <span style="font-weight:600;font-size:0.85em;">問${i+1}. ${a.question.category || ''}</span>
+        <span class="ri-result ${a.isCorrect ? 'ri-correct' : 'ri-wrong'}">${a.isCorrect ? '正解' : '不正解'}</span>
+      </div>
+      <div class="ri-q">${a.question.question}</div>
+      <div class="ri-exp">
+        ${!a.isCorrect ? `<span style="color:#c62828;">あなたの回答: ${labels[a.selected]}</span><br>` : ''}
+        <span style="color:#2e7d32;">正解: ${labels[a.question.answer]}</span><br>
+        ${a.question.explanation || ''}
+      </div>
+    </div>`;
+  }).join('');
+  area.classList.remove('hidden');
+}
+
+function hideAll() {
+  ['startScreen', 'modeScreen', 'quizScreen', 'resultScreen'].forEach(id =>
+    document.getElementById(id).classList.add('hidden')
+  );
+}
+
+function goHome() {
+  hideAll();
+  document.getElementById('startScreen').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
