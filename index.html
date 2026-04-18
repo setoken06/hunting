@@ -73,6 +73,15 @@
     .question-num { font-size: 0.85em; color: #888; font-weight: 600; }
     .category-tag { font-size: 0.75em; background: #e8f5e9; color: #2d5016; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
     .question-text { font-size: 1.05em; line-height: 1.7; margin-bottom: 20px; font-weight: 500; }
+    .question-image {
+      width: 100%; max-width: 480px; display: block;
+      margin: 0 auto 20px; border-radius: 10px;
+      background: #f5f5f5; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .review-item .ri-image {
+      width: 100%; max-width: 240px; display: block;
+      margin: 8px 0; border-radius: 6px;
+    }
 
     /* Choices */
     .choices { display: flex; flex-direction: column; gap: 10px; }
@@ -190,6 +199,7 @@
         <span class="question-num" id="questionNum"></span>
         <span class="category-tag" id="categoryTag"></span>
       </div>
+      <img class="question-image hidden" id="questionImage" alt="">
       <div class="question-text" id="questionText"></div>
       <div class="choices" id="choices"></div>
       <div class="explanation hidden" id="explanation"></div>
@@ -304,6 +314,15 @@ function showQuestion() {
   document.getElementById('questionNum').textContent = `問題 ${currentIndex + 1} / ${total}`;
   document.getElementById('categoryTag').textContent = q.category || '';
   document.getElementById('questionText').textContent = q.question;
+  const imgEl = document.getElementById('questionImage');
+  if (q.image) {
+    imgEl.src = q.image;
+    imgEl.alt = `設問No.${currentIndex + 1}の画像`;
+    imgEl.classList.remove('hidden');
+  } else {
+    imgEl.removeAttribute('src');
+    imgEl.classList.add('hidden');
+  }
   document.getElementById('explanation').classList.add('hidden');
   document.getElementById('nextArea').classList.add('hidden');
 
@@ -396,6 +415,7 @@ function showReview() {
         <span class="ri-result ${a.isCorrect ? 'ri-correct' : 'ri-wrong'}">${a.isCorrect ? '正解' : '不正解'}</span>
       </div>
       <div class="ri-q">${a.question.question}</div>
+      ${a.question.image ? `<img class="ri-image" src="${a.question.image}" alt="設問No.${i+1}の画像">` : ''}
       <div class="ri-exp">
         ${!a.isCorrect ? `<span style="color:#c62828;">あなたの回答: ${labels[a.selected]}</span><br>` : ''}
         <span style="color:#2e7d32;">正解: ${labels[a.question.answer]}</span><br>
