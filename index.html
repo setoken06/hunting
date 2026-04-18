@@ -151,7 +151,7 @@
 
 <header>
   <h1>狩猟免許 過去問アプリ</h1>
-  <p id="headerSub">4ジャンル 全780問</p>
+  <p id="headerSub">5ジャンル 全780問</p>
 </header>
 
 <div class="container">
@@ -171,6 +171,10 @@
       <div class="genre-card" onclick="selectGenre('examination')">
         <h3>猟銃等講習会 考査問題</h3>
         <div class="meta" id="examinationCount">読み込み中...</div>
+      </div>
+      <div class="genre-card" onclick="selectGenre('reiwa8')">
+        <h3>令和8年 猟銃等講習会考査問題</h3>
+        <div class="meta" id="reiwa8Count">読み込み中...</div>
       </div>
       <div class="genre-card" onclick="selectGenre('wana')">
         <h3>わな猟 過去問</h3>
@@ -235,20 +239,22 @@
 <script>
 const DATA = {};
 const GENRE_INFO = {
-  type1:       { file: 'data/type1.json',       name: '第一種狩猟 過去問',     el: 'type1Count' },
-  animals:     { file: 'data/animals.json',      name: '鳥獣識別イラスト',       el: 'animalsCount' },
-  examination: { file: 'data/examination.json',  name: '猟銃等講習会 考査問題',  el: 'examinationCount' },
-  wana:        { file: 'data/wana.json',         name: 'わな猟 過去問',          el: 'wanaCount' }
+  type1:       { file: 'data/type1.json',       name: '第一種狩猟 過去問',               el: 'type1Count' },
+  animals:     { file: 'data/animals.json',      name: '鳥獣識別イラスト',                 el: 'animalsCount' },
+  examination: { file: 'data/examination.json',  name: '猟銃等講習会 考査問題',            el: 'examinationCount' },
+  reiwa8:      { file: 'data/reiwa8.json',       name: '令和8年 猟銃等講習会考査問題',     el: 'reiwa8Count' },
+  wana:        { file: 'data/wana.json',         name: 'わな猟 過去問',                    el: 'wanaCount' }
 };
 
 // Load all data
 let totalQ = 0;
 Promise.all(Object.entries(GENRE_INFO).map(([key, info]) =>
   fetch(info.file).then(r => r.json()).then(data => {
-    // Normalize examination questions
-    if (key === 'examination') {
+    // Normalize ○×-style questions (no choices field)
+    if (key === 'examination' || key === 'reiwa8') {
+      const defaultCategory = key === 'reiwa8' ? '令和8年猟銃等講習会考査問題' : '猟銃等講習会';
       data = data.map(q => ({
-        category: q.category || '猟銃等講習会',
+        category: q.category || defaultCategory,
         question: q.question,
         choices: q.choices || ['○', '×'],
         answer: q.answer,
@@ -260,7 +266,8 @@ Promise.all(Object.entries(GENRE_INFO).map(([key, info]) =>
     totalQ += data.length;
   })
 )).then(() => {
-  document.getElementById('headerSub').textContent = `4ジャンル 全${totalQ}問`;
+  const count = Object.keys(GENRE_INFO).length;
+  document.getElementById('headerSub').textContent = `${count}ジャンル 全${totalQ}問`;
 });
 
 let currentGenre = '';
