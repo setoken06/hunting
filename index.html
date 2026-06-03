@@ -176,6 +176,10 @@
         <h3>令和8年 猟銃等講習会 考査問題</h3>
         <div class="meta" id="reiwa8Count">読み込み中...</div>
       </div>
+      <div class="genre-card" onclick="selectGenre('reiwa8_numbers')">
+        <h3>令和8年 猟銃等講習会考査問題（数値系）</h3>
+        <div class="meta" id="reiwa8NumbersCount">読み込み中...</div>
+      </div>
       <div class="genre-card" onclick="selectGenre('wana')">
         <h3>わな猟 過去問</h3>
         <div class="meta" id="wanaCount">読み込み中...</div>
@@ -244,6 +248,7 @@ const GENRE_INFO = {
   animals:     { file: 'data/animals.json',      name: '鳥獣識別イラスト',                 el: 'animalsCount' },
   examination: { file: 'data/examination.json',  name: '猟銃等講習会 考査問題',            el: 'examinationCount' },
   reiwa8:      { file: 'data/reiwa8.json',       name: '令和8年 猟銃等講習会考査問題',     el: 'reiwa8Count' },
+  reiwa8_numbers: { file: 'data/reiwa8_numbers.json', name: '令和8年 猟銃等講習会考査問題（数値系）', el: 'reiwa8NumbersCount' },
   wana:        { file: 'data/wana.json',         name: 'わな猟 過去問',                    el: 'wanaCount' }
 };
 
@@ -252,8 +257,10 @@ let totalQ = 0;
 Promise.all(Object.entries(GENRE_INFO).map(([key, info]) =>
   fetch(info.file).then(r => r.json()).then(data => {
     // Normalize ○×-style questions (no choices field)
-    if (key === 'examination' || key === 'reiwa8') {
-      const defaultCategory = key === 'reiwa8' ? '令和8年猟銃等講習会考査問題' : '猟銃等講習会';
+    if (key === 'examination' || key === 'reiwa8' || key === 'reiwa8_numbers') {
+      const defaultCategory = key === 'reiwa8' ? '令和8年猟銃等講習会考査問題'
+        : key === 'reiwa8_numbers' ? '令和8年猟銃等講習会考査問題（数値系）'
+        : '猟銃等講習会';
       data = data.map(q => ({
         category: q.category || defaultCategory,
         question: q.question,
