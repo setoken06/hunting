@@ -169,11 +169,11 @@
         <div class="meta" id="animalsCount">読み込み中...</div>
       </div>
       <div class="genre-card" onclick="selectGenre('examination')">
-        <h3>猟銃等講習会 考査問題</h3>
+        <h3>猟銃等講習会 考査問題 過去問</h3>
         <div class="meta" id="examinationCount">読み込み中...</div>
       </div>
       <div class="genre-card" onclick="selectGenre('reiwa8')">
-        <h3>令和8年 猟銃等講習会考査問題</h3>
+        <h3>令和8年 猟銃等講習会 考査問題</h3>
         <div class="meta" id="reiwa8Count">読み込み中...</div>
       </div>
       <div class="genre-card" onclick="selectGenre('wana')">
@@ -188,6 +188,7 @@
     <h2 id="modeTitle"></h2>
     <div class="mode-buttons">
       <button class="btn btn-primary" onclick="startQuiz('all')">全問チャレンジ</button>
+      <button class="btn btn-primary" onclick="startQuiz('random50')">本番形式 50問（合格 90%）</button>
       <button class="btn btn-secondary" onclick="startQuiz('random20')">ランダム20問</button>
       <button class="btn btn-secondary" onclick="startQuiz('random10')">ランダム10問</button>
       <button class="btn btn-outline" onclick="startQuiz('random5')">サクッと5問</button>
@@ -299,6 +300,8 @@ function startQuiz(mode) {
     // keep currentQuiz
   } else if (mode === 'all') {
     currentQuiz = shuffle(pool);
+  } else if (mode === 'random50') {
+    currentQuiz = shuffle(pool).slice(0, 50);
   } else if (mode === 'random20') {
     currentQuiz = shuffle(pool).slice(0, 20);
   } else if (mode === 'random10') {
@@ -394,16 +397,17 @@ function showResult() {
 
   const total = currentQuiz.length;
   const pct = Math.round((score / total) * 100);
+  const passLine = 90; // 合格ライン 90%
   const circle = document.getElementById('scoreCircle');
-  circle.className = 'score-circle ' + (pct >= 70 ? 'score-high' : pct >= 40 ? 'score-mid' : 'score-low');
+  circle.className = 'score-circle ' + (pct >= passLine ? 'score-high' : pct >= 70 ? 'score-mid' : 'score-low');
   document.getElementById('scoreNum').textContent = score;
   document.getElementById('scoreDen').textContent = `/ ${total}問`;
 
   let msg, detail;
-  if (pct >= 90) { msg = '素晴らしい!'; detail = '合格ラインを余裕でクリア!'; }
-  else if (pct >= 70) { msg = '合格ライン!'; detail = 'あと少しで満点です!'; }
-  else if (pct >= 50) { msg = 'もう少し!'; detail = '間違えた問題を復習しましょう。'; }
-  else { msg = 'がんばりましょう!'; detail = '解説をよく読んで復習しましょう。'; }
+  if (pct >= passLine) { msg = '合格 🎯'; detail = `合格ライン ${passLine}% を突破!`; }
+  else if (pct >= 70) { msg = 'あと一歩!'; detail = `合格ラインは ${passLine}%。間違えた問題を復習しよう。`; }
+  else if (pct >= 50) { msg = 'もう少し!'; detail = `合格ラインは ${passLine}%。解説を読んで再挑戦しよう。`; }
+  else { msg = 'がんばりましょう!'; detail = `合格ラインは ${passLine}%。基礎から見直そう。`; }
 
   document.getElementById('resultMsg').textContent = msg;
   document.getElementById('resultDetail').textContent = `正答率 ${pct}% - ${detail}`;
