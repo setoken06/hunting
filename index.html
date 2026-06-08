@@ -192,6 +192,7 @@
     <h2 id="modeTitle"></h2>
     <div class="mode-buttons">
       <button class="btn btn-primary" onclick="startQuiz('all')">全問チャレンジ</button>
+      <button class="btn btn-primary" onclick="startQuiz('random100')">じっくり100問（合格 90%）</button>
       <button class="btn btn-primary" onclick="startQuiz('random50')">本番形式 50問（合格 90%）</button>
       <button class="btn btn-secondary" onclick="startQuiz('random20')">ランダム20問</button>
       <button class="btn btn-secondary" onclick="startQuiz('random10')">ランダム10問</button>
@@ -307,6 +308,8 @@ function startQuiz(mode) {
     // keep currentQuiz
   } else if (mode === 'all') {
     currentQuiz = shuffle(pool);
+  } else if (mode === 'random100') {
+    currentQuiz = shuffle(pool).slice(0, 100);
   } else if (mode === 'random50') {
     currentQuiz = shuffle(pool).slice(0, 50);
   } else if (mode === 'random20') {
