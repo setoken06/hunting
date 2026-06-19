@@ -340,7 +340,7 @@ function showQuestion() {
   const total = currentQuiz.length;
   document.getElementById('progressFill').style.width = ((currentIndex / total) * 100) + '%';
   document.getElementById('questionNum').textContent = `問題 ${currentIndex + 1} / ${total}`;
-  document.getElementById('categoryTag').textContent = q.category || '';
+  document.getElementById('categoryTag').textContent = (q.category || '') + (q.qno ? ' 問' + q.qno : '');
   document.getElementById('questionText').textContent = q.question;
   const imgEl = document.getElementById('questionImage');
   if (q.image) {
