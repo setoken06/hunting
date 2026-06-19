@@ -184,6 +184,10 @@
         <h3>わな猟 過去問</h3>
         <div class="meta" id="wanaCount">読み込み中...</div>
       </div>
+      <div class="genre-card" onclick="selectGenre('reidai')">
+        <h3>令和8年 狩猟免許 知識試験 例題集</h3>
+        <div class="meta" id="reidaiCount">読み込み中...</div>
+      </div>
     </div>
   </div>
 
@@ -251,7 +255,8 @@ const GENRE_INFO = {
   examination: { file: 'data/examination.json',  name: '猟銃等講習会 考査問題',            el: 'examinationCount' },
   reiwa8:      { file: 'data/reiwa8.json',       name: '令和8年 猟銃等講習会考査問題',     el: 'reiwa8Count' },
   reiwa8_numbers: { file: 'data/reiwa8_numbers.json', name: '令和8年 猟銃等講習会考査問題（数値系）', el: 'reiwa8NumbersCount' },
-  wana:        { file: 'data/wana.json',         name: 'わな猟 過去問',                    el: 'wanaCount' }
+  wana:        { file: 'data/wana.json',         name: 'わな猟 過去問',                    el: 'wanaCount' },
+  reidai:      { file: 'data/reidai.json',       name: '令和8年 狩猟免許 知識試験 例題集',  el: 'reidaiCount' }
 };
 
 // Load all data
