@@ -197,6 +197,7 @@
       <button class="btn btn-secondary" onclick="startQuiz('random20')">ランダム20問</button>
       <button class="btn btn-secondary" onclick="startQuiz('random10')">ランダム10問</button>
       <button class="btn btn-outline" onclick="startQuiz('random5')">サクッと5問</button>
+      <button class="btn btn-outline" onclick="startQuiz('sequential')">🛠 問順（デバッグ）</button>
       <button class="btn btn-outline btn-back" onclick="goHome()">ジャンル選択に戻る</button>
     </div>
   </div>
@@ -318,6 +319,8 @@ function startQuiz(mode) {
     currentQuiz = shuffle(pool).slice(0, 10);
   } else if (mode === 'random5') {
     currentQuiz = shuffle(pool).slice(0, 5);
+  } else if (mode === 'sequential') {
+    currentQuiz = [...pool]; // デバッグ用：シャッフルせずファイル順に全問
   }
   currentIndex = 0;
   score = 0;
