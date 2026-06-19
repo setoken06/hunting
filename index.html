@@ -114,6 +114,15 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
     .next-area { margin-top: 16px; text-align: center; }
 
+    /* 鳥獣識別：名前入力 */
+    .animal-answer { display: flex; flex-direction: column; gap: 12px; }
+    .ai-row { display: flex; gap: 8px; }
+    .ai-row input { flex: 1; min-width: 0; padding: 13px 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; font-family: inherit; }
+    .ai-row input:focus { outline: none; border-color: #4a7c28; }
+    .ai-row input:disabled { background: #f5f5f5; color: #999; }
+    .ai-submit { width: auto !important; flex-shrink: 0; padding: 13px 18px !important; }
+    .ai-or { text-align: center; color: #bbb; font-size: 0.8em; }
+
     /* Result */
     .result-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 32px 24px; text-align: center; }
     .score-circle {
@@ -354,12 +363,18 @@ function showQuestion() {
   document.getElementById('explanation').classList.add('hidden');
   document.getElementById('nextArea').classList.add('hidden');
 
-  const labels = q.choices.length === 2 ? ['○', '×'] : ['ア', 'イ', 'ウ'];
-  // For examination (○×), use the actual choices
-  const choiceLabels = q.choices.length === 2 ? ['○', '×'] : ['ア', 'イ', 'ウ'];
-
   const choicesEl = document.getElementById('choices');
   choicesEl.innerHTML = '';
+
+  // 鳥獣識別イラスト：狩猟鳥獣なら名前入力／非狩猟鳥獣ならボタン
+  if (currentGenre === 'animals') {
+    document.getElementById('questionText').textContent =
+      'このイラストの鳥獣は？　狩猟鳥獣なら名前を入力、非狩猟鳥獣ならボタンを押してください。';
+    renderAnimalInput(q, choicesEl);
+    return;
+  }
+
+  const choiceLabels = q.choices.length === 2 ? ['○', '×'] : ['ア', 'イ', 'ウ'];
   q.choices.forEach((c, i) => {
     const btn = document.createElement('button');
     btn.className = 'choice-btn';
@@ -371,6 +386,52 @@ function showQuestion() {
     btn.onclick = () => selectAnswer(i);
     choicesEl.appendChild(btn);
   });
+}
+
+// ひらがな→カタカナ・空白/中点除去で名前を正規化
+function normName(s){
+  return (s||'').trim().replace(/[\s　・]/g,'').normalize('NFKC')
+    .replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+}
+
+function renderAnimalInput(q, el){
+  el.innerHTML =
+    '<div class="animal-answer">' +
+      '<div class="ai-row">' +
+        '<input id="aiName" type="text" placeholder="狩猟鳥獣の名前を入力" autocomplete="off">' +
+        '<button class="btn btn-primary ai-submit" id="aiSubmit">回答</button>' +
+      '</div>' +
+      '<div class="ai-or">― または ―</div>' +
+      '<button class="btn btn-secondary" id="aiHikari">非狩猟鳥獣</button>' +
+    '</div>';
+  const input = document.getElementById('aiName');
+  document.getElementById('aiSubmit').onclick = () => answerAnimal('name', input.value);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') answerAnimal('name', input.value); });
+  document.getElementById('aiHikari').onclick = () => answerAnimal('hikari', '');
+}
+
+function answerAnimal(type, value){
+  const q = currentQuiz[currentIndex];
+  const huntable = q.answer === 0;
+  const isCorrect = type === 'hikari' ? !huntable : (huntable && normName(value) === normName(q.name));
+
+  document.getElementById('aiName').disabled = true;
+  document.getElementById('aiSubmit').disabled = true;
+  const hk = document.getElementById('aiHikari');
+  hk.disabled = true; hk.style.opacity = '0.6';
+
+  if (isCorrect) score++;
+  answers.push({ question: q, animal: { type, value }, isCorrect });
+
+  const correctTxt = huntable ? `正解は「${q.name}」（狩猟鳥獣）` : `正解は「非狩猟鳥獣」（${q.name}）`;
+  const yourTxt = type === 'hikari' ? '非狩猟鳥獣' : `「${value || '（無回答）'}」`;
+  const expEl = document.getElementById('explanation');
+  expEl.innerHTML = `<strong>${isCorrect ? '正解!' : '不正解...'}</strong> ${correctTxt}<br>` +
+    `<span style="color:#888;font-size:0.9em;">あなたの回答: ${yourTxt}</span><br>${q.explanation || ''}`;
+  expEl.classList.remove('hidden');
+
+  document.getElementById('nextBtn').textContent = currentIndex < currentQuiz.length - 1 ? '次の問題へ' : '結果を見る';
+  document.getElementById('nextArea').classList.remove('hidden');
 }
 
 function selectAnswer(selected) {
@@ -437,6 +498,14 @@ function showReview() {
 
   area.innerHTML = answers.map((a, i) => {
     const labels = a.question.choices.length === 2 ? ['○', '×'] : ['ア', 'イ', 'ウ'];
+    let yourAns, correctAns;
+    if (a.animal) {
+      yourAns = a.animal.type === 'hikari' ? '非狩猟鳥獣' : `「${a.animal.value || '（無回答）'}」`;
+      correctAns = a.question.answer === 0 ? `${a.question.name}（狩猟鳥獣）` : `非狩猟鳥獣（${a.question.name}）`;
+    } else {
+      yourAns = labels[a.selected];
+      correctAns = labels[a.question.answer];
+    }
     return `
     <div class="review-item">
       <div class="ri-header">
@@ -446,8 +515,8 @@ function showReview() {
       <div class="ri-q">${a.question.question}</div>
       ${a.question.image ? `<img class="ri-image" src="${a.question.image}" alt="設問No.${i+1}の画像">` : ''}
       <div class="ri-exp">
-        ${!a.isCorrect ? `<span style="color:#c62828;">あなたの回答: ${labels[a.selected]}</span><br>` : ''}
-        <span style="color:#2e7d32;">正解: ${labels[a.question.answer]}</span><br>
+        ${!a.isCorrect ? `<span style="color:#c62828;">あなたの回答: ${yourAns}</span><br>` : ''}
+        <span style="color:#2e7d32;">正解: ${correctAns}</span><br>
         ${a.question.explanation || ''}
       </div>
     </div>`;
