@@ -1182,20 +1182,6 @@
  {
   "id": "net3",
   "category": "第3章 網猟具",
-  "question": "次図の猟具は何か（長方形の網を、倒して被せるような構造）。正しいものを選びなさい。　図：控縄・足杭・手・縄、被せたところが示された図。",
-  "choices": [
-   "むそう網の一種の片むそう",
-   "むそう網の一種の穂打ち",
-   "むそう網の一種の双むそう"
-  ],
-  "answer": 1,
-  "explanation": "",
-  "illust": true,
-  "image": "images/reidai/net3.jpg"
- },
- {
-  "id": "net3_2",
-  "category": "第3章 網猟具",
   "question": "次図の猟具は何か。正しいものを選びなさい。　図：控縄・足杭・手・縄、架設したところ・架むところが示された図。",
   "choices": [
    "むそう網の一種の穂打ち",
@@ -1203,9 +1189,9 @@
    "むそう網の一種の双むそう"
   ],
   "answer": 2,
-  "explanation": "",
+  "explanation": "むそう網の一種の双むそう（左右に配置された2枚の長方形の網を被せるような構造）",
   "illust": true,
-  "image": "images/reidai/net3_2.jpg"
+  "image": "images/reidai/net3.jpg"
  },
  {
   "id": "net4",
