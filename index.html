@@ -111,6 +111,8 @@
       font-size: 0.9em; line-height: 1.7; color: #444; animation: fadeIn 0.3s;
     }
     .explanation strong { color: #2d5016; }
+    .explanation.wrong { background: #fdecea; border-left-color: #c62828; }
+    .explanation.wrong strong { color: #c62828; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
     .next-area { margin-top: 16px; text-align: center; }
 
@@ -428,6 +430,7 @@ function answerAnimal(type, value){
   const expEl = document.getElementById('explanation');
   expEl.innerHTML = `<strong>${isCorrect ? '正解!' : '不正解...'}</strong> ${correctTxt}<br>` +
     `<span style="color:#888;font-size:0.9em;">あなたの回答: ${yourTxt}</span><br>${q.explanation || ''}`;
+  expEl.classList.toggle('wrong', !isCorrect);
   expEl.classList.remove('hidden');
 
   document.getElementById('nextBtn').textContent = currentIndex < currentQuiz.length - 1 ? '次の問題へ' : '結果を見る';
@@ -452,6 +455,7 @@ function selectAnswer(selected) {
   const expEl = document.getElementById('explanation');
   const expText = q.explanation || '';
   expEl.innerHTML = `<strong>${isCorrect ? '正解!' : '不正解...'}</strong> ${expText}`;
+  expEl.classList.toggle('wrong', !isCorrect);
   expEl.classList.remove('hidden');
 
   const nextArea = document.getElementById('nextArea');
