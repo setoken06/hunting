@@ -174,35 +174,27 @@
     <h2>ジャンルを選んでください</h2>
     <div class="genre-grid">
       <div class="genre-card" onclick="selectGenre('type1')">
-        <h3>第一種狩猟 過去問</h3>
+        <h3>第一種狩猟免許 過去問</h3>
         <div class="meta" id="type1Count">読み込み中...</div>
-      </div>
-      <div class="genre-card" onclick="selectGenre('animals')">
-        <h3>鳥獣識別イラスト</h3>
-        <div class="meta" id="animalsCount">読み込み中...</div>
-      </div>
-      <div class="genre-card" onclick="selectGenre('examination')">
-        <h3>猟銃等講習会 考査問題 過去問</h3>
-        <div class="meta" id="examinationCount">読み込み中...</div>
-      </div>
-      <div class="genre-card" onclick="selectGenre('reiwa8')">
-        <h3>令和8年 猟銃等講習会 考査問題</h3>
-        <div class="meta" id="reiwa8Count">読み込み中...</div>
-      </div>
-      <div class="genre-card" onclick="selectGenre('reiwa8_numbers')">
-        <h3>令和8年 猟銃等講習会考査問題（数値系）</h3>
-        <div class="meta" id="reiwa8NumbersCount">読み込み中...</div>
       </div>
       <div class="genre-card" onclick="selectGenre('wana')">
         <h3>わな猟 過去問</h3>
         <div class="meta" id="wanaCount">読み込み中...</div>
       </div>
+      <div class="genre-card" onclick="selectGenre('reiwa8')">
+        <h3>令和8年 猟銃等講習会考査問題</h3>
+        <div class="meta" id="reiwa8Count">読み込み中...</div>
+      </div>
       <div class="genre-card" onclick="selectGenre('reidai')">
-        <h3>令和8年 狩猟免許 知識試験 例題集</h3>
+        <h3>令和8年 第一種狩猟免許 例題集</h3>
         <div class="meta" id="reidaiCount">読み込み中...</div>
       </div>
+      <div class="genre-card" onclick="selectGenre('animals')">
+        <h3>鳥獣識別</h3>
+        <div class="meta" id="animalsCount">読み込み中...</div>
+      </div>
       <div class="genre-card" onclick="selectGenre('reidai_important')" style="border-left-color:#e8520e">
-        <h3>★ 重要問題 抜粋版</h3>
+        <h3>令和8年 第一種狩猟免許 重要問題</h3>
         <div class="meta" id="reidaiImportantCount">読み込み中...</div>
       </div>
     </div>
@@ -270,14 +262,12 @@
 <script>
 const DATA = {};
 const GENRE_INFO = {
-  type1:       { file: 'data/type1.json',       name: '第一種狩猟 過去問',               el: 'type1Count' },
-  animals:     { file: 'data/animals.json',      name: '鳥獣識別イラスト',                 el: 'animalsCount' },
-  examination: { file: 'data/examination.json',  name: '猟銃等講習会 考査問題',            el: 'examinationCount' },
-  reiwa8:      { file: 'data/reiwa8.json',       name: '令和8年 猟銃等講習会考査問題',     el: 'reiwa8Count' },
-  reiwa8_numbers: { file: 'data/reiwa8_numbers.json', name: '令和8年 猟銃等講習会考査問題（数値系）', el: 'reiwa8NumbersCount' },
+  type1:       { file: 'data/type1.json',       name: '第一種狩猟免許 過去問',            el: 'type1Count' },
   wana:        { file: 'data/wana.json',         name: 'わな猟 過去問',                    el: 'wanaCount' },
-  reidai:      { file: 'data/reidai.json',       name: '令和8年 狩猟免許 知識試験 例題集',  el: 'reidaiCount' },
-  reidai_important: { file: 'data/reidai_important.json', name: '★ 重要問題 抜粋版', el: 'reidaiImportantCount' }
+  reiwa8:      { file: 'data/reiwa8.json',       name: '令和8年 猟銃等講習会考査問題',     el: 'reiwa8Count' },
+  reidai:      { file: 'data/reidai.json',       name: '令和8年 第一種狩猟免許 例題集',     el: 'reidaiCount' },
+  animals:     { file: 'data/animals.json',      name: '鳥獣識別',                         el: 'animalsCount' },
+  reidai_important: { file: 'data/reidai_important.json', name: '令和8年 第一種狩猟免許 重要問題', el: 'reidaiImportantCount' }
 };
 
 // Load all data
