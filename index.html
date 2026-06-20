@@ -72,6 +72,8 @@
     .question-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .question-num { font-size: 0.85em; color: #888; font-weight: 600; }
     .category-tag { font-size: 0.75em; background: #e8f5e9; color: #2d5016; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+    .important-badge { display: inline-block; font-size: 0.72em; font-weight: 700; color: #fff; background: linear-gradient(135deg, #e8520e, #f5a623); padding: 3px 10px 3px 8px; border-radius: 20px; margin-left: 6px; box-shadow: 0 1px 3px rgba(232,82,14,0.3); }
+    .important-badge::before { content: '★ '; }
     .question-text { font-size: 1.05em; line-height: 1.7; margin-bottom: 20px; font-weight: 500; }
     .question-image {
       width: 100%; max-width: 480px; display: block;
@@ -199,6 +201,10 @@
         <h3>令和8年 狩猟免許 知識試験 例題集</h3>
         <div class="meta" id="reidaiCount">読み込み中...</div>
       </div>
+      <div class="genre-card" onclick="selectGenre('reidai_important')" style="border-left-color:#e8520e">
+        <h3>★ 重要問題 抜粋版</h3>
+        <div class="meta" id="reidaiImportantCount">読み込み中...</div>
+      </div>
     </div>
   </div>
 
@@ -223,7 +229,10 @@
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
       <div class="question-meta">
         <span class="question-num" id="questionNum"></span>
-        <span class="category-tag" id="categoryTag"></span>
+        <span>
+          <span class="category-tag" id="categoryTag"></span>
+          <span class="important-badge hidden" id="importantBadge">重要問題</span>
+        </span>
       </div>
       <img class="question-image hidden" id="questionImage" alt="">
       <div class="question-text" id="questionText"></div>
@@ -267,7 +276,8 @@ const GENRE_INFO = {
   reiwa8:      { file: 'data/reiwa8.json',       name: '令和8年 猟銃等講習会考査問題',     el: 'reiwa8Count' },
   reiwa8_numbers: { file: 'data/reiwa8_numbers.json', name: '令和8年 猟銃等講習会考査問題（数値系）', el: 'reiwa8NumbersCount' },
   wana:        { file: 'data/wana.json',         name: 'わな猟 過去問',                    el: 'wanaCount' },
-  reidai:      { file: 'data/reidai.json',       name: '令和8年 狩猟免許 知識試験 例題集',  el: 'reidaiCount' }
+  reidai:      { file: 'data/reidai.json',       name: '令和8年 狩猟免許 知識試験 例題集',  el: 'reidaiCount' },
+  reidai_important: { file: 'data/reidai_important.json', name: '★ 重要問題 抜粋版', el: 'reidaiImportantCount' }
 };
 
 // Load all data
@@ -352,6 +362,7 @@ function showQuestion() {
   document.getElementById('progressFill').style.width = ((currentIndex / total) * 100) + '%';
   document.getElementById('questionNum').textContent = `問題 ${currentIndex + 1} / ${total}`;
   document.getElementById('categoryTag').textContent = (q.category || '') + (q.qno ? ' 問' + q.qno : '');
+  document.getElementById('importantBadge').classList.toggle('hidden', !q.important);
   document.getElementById('questionText').textContent = q.question;
   const imgEl = document.getElementById('questionImage');
   if (q.image) {
