@@ -1590,6 +1590,7 @@
   "explanation": "くくりわな　色々なタイプがあるが、図はひきずり型とピラミッド型。バネ式などがある。",
   "qno": "1",
   "illust": true,
+  "important": true,
   "image": "images/reidai/wana1.jpg"
  },
  {
@@ -1605,6 +1606,7 @@
   "explanation": "くくりわなの一種の筒式イタチ捕獲器　わな具として使用できるものは、首が締まりすぎないようにストッパーがついている。",
   "qno": "2",
   "illust": true,
+  "important": true,
   "image": "images/reidai/wana2.jpg"
  },
  {
@@ -1620,6 +1622,7 @@
   "explanation": "はこわな",
   "qno": "3",
   "illust": true,
+  "important": true,
   "image": "images/reidai/wana3.jpg"
  },
  {
@@ -1635,6 +1638,7 @@
   "explanation": "はこおとし　おしの一種のはこおとしは、通常のおしは、獲物を圧殺するが、猟具として使用できるものははこおとしの「桟（さん）」がついている。",
   "qno": "4",
   "illust": true,
+  "important": true,
   "image": "images/reidai/wana4.jpg"
  },
  {
@@ -1650,6 +1654,7 @@
   "explanation": "くくりわな　色々なタイプがあるが、図は引きずり型、鳥居型、ピラミッド型、はねあげ型、はねあげ型がある。",
   "qno": "5",
   "illust": true,
+  "important": true,
   "image": "images/reidai/wana5.jpg"
  },
  {
@@ -1665,6 +1670,7 @@
   "explanation": "囲いわな　いわゆる天井部分のないはこわな。",
   "qno": "6",
   "illust": true,
+  "important": true,
   "image": "images/reidai/wana6.jpg"
  },
  {
@@ -1678,7 +1684,8 @@
   ],
   "answer": 0,
   "explanation": "イ：はこおとしは、くくりわなではない。ウ：囲い型はない。",
-  "qno": "7"
+  "qno": "7",
+  "important": true
  },
  {
   "id": "wana8",
@@ -1691,7 +1698,8 @@
   ],
   "answer": 0,
   "explanation": "イは「はこわな」、ウは「はこおとし」のことである。",
-  "qno": "8"
+  "qno": "8",
+  "important": true
  },
  {
   "id": "wana9",
@@ -1704,7 +1712,8 @@
   ],
   "answer": 2,
   "explanation": "アのように、イノシシなどの大型獣類を吊り上げる構造のくくりわなは、非常に危険なわなであり、使用が禁止されている。また、狩猟では、クマをわなで捕獲することは禁止されている。",
-  "qno": "9"
+  "qno": "9",
+  "important": true
  },
  {
   "id": "wana10",
@@ -1717,7 +1726,8 @@
   ],
   "answer": 2,
   "explanation": "アはよりもどしによる効果の一つの説明である。",
-  "qno": "10"
+  "qno": "10",
+  "important": true
  },
  {
   "id": "wana11",
@@ -1730,7 +1740,8 @@
   ],
   "answer": 0,
   "explanation": "ワイヤーロープがねじれると切れやすくなることから、ワイヤーロープの切断防止を目的としたものである。なお、イノシシ及びシカの捕獲を目的としたくくりわなについては、よりもどしを装着することが義務付けられている。",
-  "qno": "11"
+  "qno": "11",
+  "important": true
  },
  {
   "id": "wana12",
@@ -1743,7 +1754,8 @@
   ],
   "answer": 1,
   "explanation": "「はこわな」も「囲いわな」も、わなの中に獣が入り込んで何を込んで引いたりすると、出入口が半自動的に閉まることにより、獣を閉じ込めて捕えるわなのことである。これらのうち、囲いわなは、天井（半分以下）を除く周辺を杭や金網、鉄格子等で囲って捕えるものをいう。",
-  "qno": "12"
+  "qno": "12",
+  "important": true
  },
  {
   "id": "wana13",
@@ -1756,7 +1768,8 @@
   ],
   "answer": 0,
   "explanation": "",
-  "qno": "13"
+  "qno": "13",
+  "important": true
  },
  {
   "id": "wana14",
@@ -1769,7 +1782,8 @@
   ],
   "answer": 0,
   "explanation": "",
-  "qno": "14"
+  "qno": "14",
+  "important": true
  },
  {
   "id": "wana15",
@@ -1782,7 +1796,8 @@
   ],
   "answer": 1,
   "explanation": "",
-  "qno": "15"
+  "qno": "15",
+  "important": true
  },
  {
   "id": "wana16",
@@ -1795,7 +1810,8 @@
   ],
   "answer": 1,
   "explanation": "ア：禁止行為の「おし」の説明である。<br>ウ：とりもちは、使用が禁止されている。",
-  "qno": "16"
+  "qno": "16",
+  "important": true
  },
  {
   "id": "wana17",
@@ -1808,7 +1824,8 @@
   ],
   "answer": 0,
   "explanation": "非狩猟鳥獣であるイタチ（メス）などを誤って捕獲してしまわないように、ストッパーがついている。",
-  "qno": "17"
+  "qno": "17",
+  "important": true
  },
  {
   "id": "wana18",
@@ -1821,7 +1838,8 @@
   ],
   "answer": 0,
   "explanation": "",
-  "qno": "18"
+  "qno": "18",
+  "important": true
  },
  {
   "id": "wana19",
@@ -1834,7 +1852,8 @@
   ],
   "answer": 0,
   "explanation": "",
-  "qno": "19"
+  "qno": "19",
+  "important": true
  },
  {
   "id": "wana20",
@@ -1847,7 +1866,8 @@
   ],
   "answer": 2,
   "explanation": "以前は内径の最大長が12cm以上のとらばさみや、のこぎり歯（鋸歯）のあるとらばさみのみ使用が禁止されていた。平成19年狩猟期からは、すべてのとらばさみについて狩猟における使用が禁止されている。<br>**①猟具の種類・構造・機能**",
-  "qno": "20"
+  "qno": "20",
+  "important": true
  },
  {
   "id": "gun1",
