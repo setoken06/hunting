@@ -94,7 +94,8 @@
   ],
   "answer": 2,
   "explanation": "ア：ドバト、ゴイサギは、非狩猟鳥獣<br>イ：ウズラ、カケスは、非狩猟鳥獣",
-  "qno": "7"
+  "qno": "7",
+  "important": true
  },
  {
   "id": "ch28",
@@ -107,7 +108,8 @@
   ],
   "answer": 1,
   "explanation": "ア：ムササビ、モモンガは、非狩猟鳥獣<br>ウ：オコジョ、ニホンリスは、非狩猟鳥獣（シマリス、タイワンリスは狩猟鳥獣）",
-  "qno": "8"
+  "qno": "8",
+  "important": true
  },
  {
   "id": "ch29",
@@ -120,7 +122,8 @@
   ],
   "answer": 1,
   "explanation": "イ：モモンガは、非狩猟鳥獣",
-  "qno": "9"
+  "qno": "9",
+  "important": true
  },
  {
   "id": "ch210",
@@ -133,7 +136,8 @@
   ],
   "answer": 2,
   "explanation": "ウ：オオバン、ホオジロガモは、非狩猟鳥獣",
-  "qno": "10"
+  "qno": "10",
+  "important": true
  },
  {
   "id": "ch211",
