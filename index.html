@@ -273,7 +273,7 @@ const GENRE_INFO = {
 // Load all data
 let totalQ = 0;
 Promise.all(Object.entries(GENRE_INFO).map(([key, info]) =>
-  fetch(info.file).then(r => r.json()).then(data => {
+  fetch(info.file, { cache: 'no-store' }).then(r => r.json()).then(data => {
     // Normalize ○×-style questions (no choices field)
     if (key === 'examination' || key === 'reiwa8' || key === 'reiwa8_numbers') {
       const defaultCategory = key === 'reiwa8' ? '令和8年猟銃等講習会考査問題'
