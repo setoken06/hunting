@@ -314,7 +314,8 @@
   ],
   "answer": 1,
   "explanation": "ア：ノウサギやユキウサギを捕獲するはり網は、張りっぱなしでもかまわない。<br>ウ：人がそばにいても、はり網を張りっぱなしにして使用することは禁止されている。<br>**（網を使用した猟法の規制）……網猟免許**",
-  "qno": "23"
+  "qno": "23",
+  "important": true
  },
  {
   "id": "ch224",
@@ -327,7 +328,8 @@
   ],
   "answer": 1,
   "explanation": "わなの使用は法定猟法であるが、狩猟鳥に対しての使用は、禁止されている。<br>**（かすみ網を使用した猟法の規制）……網猟免許**",
-  "qno": "24"
+  "qno": "24",
+  "important": true
  },
  {
   "id": "ch225",
@@ -340,7 +342,8 @@
   ],
   "answer": 2,
   "explanation": "かすみ網ははり網の一種で、はり網は法定猟法で使用できる猟具であるが、使用禁止猟具としてその使用・所持・販売が厳しく規制されている。かすみ網とは、極細糸で編まれた網で、「たな」を有している網のこと。<br>**（とらばさみを使用した猟法の規制）……わな猟免許**",
-  "qno": "25"
+  "qno": "25",
+  "important": true
  },
  {
   "id": "ch226",
@@ -353,7 +356,8 @@
   ],
   "answer": 2,
   "explanation": "とらばさみは、法定猟具ではないので、猟場での使用は禁止されている。<br>**（危険なわな等を使用した猟法の規制）……網猟・わな猟免許**",
-  "qno": "26"
+  "qno": "26",
+  "important": true
  },
  {
   "id": "ch227",
@@ -366,7 +370,8 @@
   ],
   "answer": 0,
   "explanation": "おとし穴やおしは、禁止猟具である。<br>くくりわなは、法定猟具であるが、イノシシを宙づりにできるような危険なものは、使用が禁止されている。<br>**（猟具（くくりわな）の使用規制）……わな猟免許**",
-  "qno": "27"
+  "qno": "27",
+  "important": true
  },
  {
   "id": "ch228",
@@ -379,7 +384,8 @@
   ],
   "answer": 0,
   "explanation": "同時に31個以上のわなの使用は禁止<br>くくりわなを使用する場合は、次の構造等を備えていなければならない。<br>①イノシシやニホンジカ<br>・輪の直径が12センチ以下<br>・締付け防止金具<br>・より戻し<br>・ワイヤーの直径が4ミリ以上<br>②上記以外の獣類（クマ類を除く）<br>・輪の直径が12センチ以下<br>・締付け防止金具",
-  "qno": "28"
+  "qno": "28",
+  "important": true
  },
  {
   "id": "ch229",
@@ -3525,7 +3531,8 @@
   "explanation": "ア：キツネ／イ：タヌキ／ウ：アナグマ",
   "qno": "60",
   "illust": true,
-  "image": "images/reidai/ch460.jpg"
+  "image": "images/reidai/ch460.jpg",
+  "important": true
  },
  {
   "id": "ch461",
@@ -3540,7 +3547,8 @@
   "explanation": "ア：ノウサギ・ユキウサギ／イ：キツネ／ウ：イタチ",
   "qno": "61",
   "illust": true,
-  "image": "images/reidai/ch461.jpg"
+  "image": "images/reidai/ch461.jpg",
+  "important": true
  },
  {
   "id": "ch462",
@@ -3555,7 +3563,8 @@
   "explanation": "ア：ツキノワグマ・ヒグマ／イ：アナグマ／ウ：タヌキ",
   "qno": "62",
   "illust": true,
-  "image": "images/reidai/ch462.jpg"
+  "image": "images/reidai/ch462.jpg",
+  "important": true
  },
  {
   "id": "ch463",
@@ -3570,7 +3579,8 @@
   "explanation": "ア：ノウサギ／イ：キツネ／ウ：イタチ",
   "qno": "63",
   "illust": true,
-  "image": "images/reidai/ch463.jpg"
+  "image": "images/reidai/ch463.jpg",
+  "important": true
  },
  {
   "id": "ch464",
@@ -3585,7 +3595,8 @@
   "explanation": "ア：ノウサギ／イ：キツネ／ウ：イタチ",
   "qno": "64",
   "illust": true,
-  "image": "images/reidai/ch464.jpg"
+  "image": "images/reidai/ch464.jpg",
+  "important": true
  },
  {
   "id": "ch465",
@@ -3600,7 +3611,8 @@
   "explanation": "ア：テン／イ：キツネ／ウ：ノウサギ",
   "qno": "65",
   "illust": true,
-  "image": "images/reidai/ch465.jpg"
+  "image": "images/reidai/ch465.jpg",
+  "important": true
  },
  {
   "id": "ch466",
@@ -3655,7 +3667,8 @@
   ],
   "answer": 2,
   "explanation": "コジュケイ、キジ、ヤマドリは留鳥",
-  "qno": "69"
+  "qno": "69",
+  "important": true
  },
  {
   "id": "ch470",
@@ -3668,7 +3681,8 @@
   ],
   "answer": 2,
   "explanation": "ゴイサギ、キジバトは留鳥／バンは一般的に夏鳥",
-  "qno": "70"
+  "qno": "70",
+  "important": true
  },
  {
   "id": "ch471",
@@ -3681,7 +3695,8 @@
   ],
   "answer": 1,
   "explanation": "ヒヨドリは漂鳥（国内で季節的に移動）／スズメは留鳥／ムクドリは留鳥（福島以北は夏鳥）",
-  "qno": "71"
+  "qno": "71",
+  "important": true
  },
  {
   "id": "ch472",
@@ -3694,7 +3709,8 @@
   ],
   "answer": 0,
   "explanation": "ヨシゴイ、ササゴイ、ヒクイナは夏鳥／ゴイサギ、オオバンは留鳥",
-  "qno": "72"
+  "qno": "72",
+  "important": true
  },
  {
   "id": "ch473",
@@ -3707,7 +3723,8 @@
   ],
   "answer": 1,
   "explanation": "オオハクチョウ、スズガモ、ホシハジロは一般的に冬鳥／ゴイサギ、カルガモは留鳥",
-  "qno": "73"
+  "qno": "73",
+  "important": true
  },
  {
   "id": "ch474",
@@ -3720,7 +3737,8 @@
   ],
   "answer": 0,
   "explanation": "キジ、ヤマドリ、カルガモは留鳥／コガモ、マガモは、一般的に冬鳥",
-  "qno": "74"
+  "qno": "74",
+  "important": true
  },
  {
   "id": "ch475",
@@ -4031,7 +4049,8 @@
   ],
   "answer": 0,
   "explanation": "キジ：雑食　　スズガモ：動物質　　マガモ：植物質",
-  "qno": "97"
+  "qno": "97",
+  "important": true
  },
  {
   "id": "ch498",
@@ -4044,7 +4063,8 @@
   ],
   "answer": 1,
   "explanation": "狩猟鳥のカラス類は雑食性、ハイマツの実を好むものは非狩猟鳥のホシガラス。",
-  "qno": "98"
+  "qno": "98",
+  "important": true
  },
  {
   "id": "ch499",
@@ -4057,7 +4077,8 @@
   ],
   "answer": 1,
   "explanation": "イノシシは雑食性",
-  "qno": "99"
+  "qno": "99",
+  "important": true
  },
  {
   "id": "ch4100",
@@ -4070,7 +4091,8 @@
   ],
   "answer": 0,
   "explanation": "ニホンジカは草食で、餌の少ないときには、樹皮まで食べてしまうことがある。／草食性があると考えられるものは食べない。",
-  "qno": "100"
+  "qno": "100",
+  "important": true
  },
  {
   "id": "ch4101",
@@ -4083,7 +4105,8 @@
   ],
   "answer": 2,
   "explanation": "ヒヨドリは雑食だが、植物質のものをよく食べる。農作物を食害することもある。",
-  "qno": "101"
+  "qno": "101",
+  "important": true
  },
  {
   "id": "ch4102",
