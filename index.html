@@ -219,6 +219,17 @@
     </div>
   </div>
 
+  <!-- Shuffle Confirm Screen (重要問題のみ) -->
+  <div id="shuffleScreen" class="mode-screen hidden">
+    <h2>選択肢をシャッフルしますか？</h2>
+    <p style="color:#666;margin:-6px 0 4px;font-size:0.92em;">選択肢の並び順をランダムに入れ替えて出題します（画像で答える問題は対象外）。</p>
+    <div class="mode-buttons">
+      <button class="btn btn-primary" onclick="chooseShuffle(true)">シャッフルする</button>
+      <button class="btn btn-secondary" onclick="chooseShuffle(false)">いいえ</button>
+      <button class="btn btn-outline btn-back" onclick="goHome()">ジャンル選択に戻る</button>
+    </div>
+  </div>
+
   <!-- Quiz Screen -->
   <div id="quizScreen" class="hidden">
     <div class="quiz-card">
@@ -311,6 +322,7 @@ let currentQuiz = [];
 let currentIndex = 0;
 let score = 0;
 let answers = [];
+let shuffleChoices = false;
 
 function shuffle(arr) {
   const a = [...arr];
@@ -323,6 +335,7 @@ function shuffle(arr) {
 
 function selectGenre(genre) {
   currentGenre = genre;
+  shuffleChoices = false;
   document.getElementById('startScreen').classList.add('hidden');
   document.getElementById('modeScreen').classList.remove('hidden');
   const info = GENRE_INFO[genre];
@@ -348,6 +361,39 @@ function startQuiz(mode) {
   } else if (mode === 'sequential') {
     currentQuiz = [...pool]; // デバッグ用：シャッフルせずファイル順に全問
   }
+  // 重要問題のみ：出題前に「選択肢シャッフルしますか？」の確認画面を挟む
+  // （リトライは直前の設定を引き継いでそのまま再開）
+  if (currentGenre === 'reidai_important' && mode !== 'retry') {
+    hideAll();
+    document.getElementById('shuffleScreen').classList.remove('hidden');
+    return;
+  }
+  beginQuiz();
+}
+
+// 選択肢をランダムに並べ替えた問題リストを返す（answerも追従。元データは破壊しない）
+function shuffleChoicesOfQuiz(quiz) {
+  return quiz.map(q => {
+    // 3択かつ全選択肢にテキストがある問題のみ対象（画像で答える問題・○×は除外）
+    const shuffleable = Array.isArray(q.choices) && q.choices.length === 3 &&
+      q.choices.every(c => typeof c === 'string' && c.trim() !== '');
+    if (!shuffleable) return q;
+    const order = shuffle(q.choices.map((_, i) => i));
+    return {
+      ...q,
+      choices: order.map(i => q.choices[i]),
+      answer: order.indexOf(q.answer)
+    };
+  });
+}
+
+function chooseShuffle(yes) {
+  shuffleChoices = yes;
+  if (yes) currentQuiz = shuffleChoicesOfQuiz(currentQuiz);
+  beginQuiz();
+}
+
+function beginQuiz() {
   currentIndex = 0;
   score = 0;
   answers = [];
@@ -546,7 +592,7 @@ function showReview() {
 }
 
 function hideAll() {
-  ['startScreen', 'modeScreen', 'quizScreen', 'resultScreen'].forEach(id =>
+  ['startScreen', 'modeScreen', 'shuffleScreen', 'quizScreen', 'resultScreen'].forEach(id =>
     document.getElementById(id).classList.add('hidden')
   );
 }
