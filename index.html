@@ -193,6 +193,10 @@
         <h3>鳥獣識別</h3>
         <div class="meta" id="animalsCount">読み込み中...</div>
       </div>
+      <div class="genre-card" onclick="selectGenre('animals_game')">
+        <h3>鳥獣識別（狩猟鳥獣のみ）</h3>
+        <div class="meta" id="animalsGameCount">読み込み中...</div>
+      </div>
       <div class="genre-card" onclick="selectGenre('reidai_important')" style="border-left-color:#e8520e">
         <h3>令和8年 第一種狩猟免許 重要問題</h3>
         <div class="meta" id="reidaiImportantCount">読み込み中...</div>
@@ -267,6 +271,7 @@ const GENRE_INFO = {
   reiwa8:      { file: 'data/reiwa8.json',       name: '令和8年 猟銃等講習会考査問題',     el: 'reiwa8Count' },
   reidai:      { file: 'data/reidai.json',       name: '令和8年 第一種狩猟免許 例題集',     el: 'reidaiCount' },
   animals:     { file: 'data/animals.json',      name: '鳥獣識別',                         el: 'animalsCount' },
+  animals_game: { file: 'data/animals.json',     name: '鳥獣識別（狩猟鳥獣のみ）',          el: 'animalsGameCount' },
   reidai_important: { file: 'data/reidai_important.json', name: '令和8年 第一種狩猟免許 重要問題', el: 'reidaiImportantCount' }
 };
 
@@ -287,9 +292,14 @@ Promise.all(Object.entries(GENRE_INFO).map(([key, info]) =>
         explanation: q.explanation || ''
       }));
     }
+    // 「狩猟鳥獣のみ」モードは animals.json から狩猟鳥獣（game:true）だけを抽出
+    if (key === 'animals_game') {
+      data = data.filter(a => a.game);
+    }
     DATA[key] = data;
     document.getElementById(info.el).textContent = `${data.length}問`;
-    totalQ += data.length;
+    // animals_game は animals.json の再利用なので総問数には加算しない
+    if (key !== 'animals_game') totalQ += data.length;
   })
 )).then(() => {
   const count = Object.keys(GENRE_INFO).length;
@@ -370,9 +380,10 @@ function showQuestion() {
   choicesEl.innerHTML = '';
 
   // 鳥獣識別イラスト：狩猟鳥獣なら名前入力／非狩猟鳥獣ならボタン
-  if (currentGenre === 'animals') {
-    document.getElementById('questionText').textContent =
-      'このイラストの鳥獣は？　狩猟鳥獣なら名前を入力、非狩猟鳥獣ならボタンを押してください。';
+  if (currentGenre === 'animals' || currentGenre === 'animals_game') {
+    document.getElementById('questionText').textContent = currentGenre === 'animals_game'
+      ? 'このイラストの狩猟鳥獣の名前を入力してください。'
+      : 'このイラストの鳥獣は？　狩猟鳥獣なら名前を入力、非狩猟鳥獣ならボタンを押してください。';
     renderAnimalInput(q, choicesEl);
     return;
   }
@@ -398,33 +409,37 @@ function normName(s){
 }
 
 function renderAnimalInput(q, el){
+  // 「狩猟鳥獣のみ」モードはすべて狩猟鳥獣なので「非狩猟鳥獣」ボタンは出さない
+  const gameOnly = currentGenre === 'animals_game';
   el.innerHTML =
     '<div class="animal-answer">' +
       '<div class="ai-row">' +
         '<input id="aiName" type="text" placeholder="狩猟鳥獣の名前を入力" autocomplete="off">' +
         '<button class="btn btn-primary ai-submit" id="aiSubmit">回答</button>' +
       '</div>' +
-      '<div class="ai-or">― または ―</div>' +
-      '<button class="btn btn-secondary" id="aiHikari">非狩猟鳥獣</button>' +
+      (gameOnly ? '' :
+        '<div class="ai-or">― または ―</div>' +
+        '<button class="btn btn-secondary" id="aiHikari">非狩猟鳥獣</button>') +
     '</div>';
   const input = document.getElementById('aiName');
   document.getElementById('aiSubmit').onclick = () => answerAnimal('name', input.value);
   input.addEventListener('keydown', e => { if (e.key === 'Enter') answerAnimal('name', input.value); });
-  document.getElementById('aiHikari').onclick = () => answerAnimal('hikari', '');
+  if (!gameOnly) document.getElementById('aiHikari').onclick = () => answerAnimal('hikari', '');
 }
 
 function answerAnimal(type, value){
   const q = currentQuiz[currentIndex];
-  const huntable = q.answer === 0;
+  // 「狩猟鳥獣のみ」モードは出題が全て狩猟鳥獣
+  const huntable = currentGenre === 'animals_game' ? true : (q.answer === 0);
   const isCorrect = type === 'hikari' ? !huntable : (huntable && normName(value) === normName(q.name));
 
   document.getElementById('aiName').disabled = true;
   document.getElementById('aiSubmit').disabled = true;
   const hk = document.getElementById('aiHikari');
-  hk.disabled = true; hk.style.opacity = '0.6';
+  if (hk) { hk.disabled = true; hk.style.opacity = '0.6'; }
 
   if (isCorrect) score++;
-  answers.push({ question: q, animal: { type, value }, isCorrect });
+  answers.push({ question: q, animal: { type, value }, isCorrect, huntable });
 
   const correctTxt = huntable ? `正解は「${q.name}」（狩猟鳥獣）` : `正解は「非狩猟鳥獣」（${q.name}）`;
   const yourTxt = type === 'hikari' ? '非狩猟鳥獣' : `「${value || '（無回答）'}」`;
@@ -506,7 +521,8 @@ function showReview() {
     let yourAns, correctAns;
     if (a.animal) {
       yourAns = a.animal.type === 'hikari' ? '非狩猟鳥獣' : `「${a.animal.value || '（無回答）'}」`;
-      correctAns = a.question.answer === 0 ? `${a.question.name}（狩猟鳥獣）` : `非狩猟鳥獣（${a.question.name}）`;
+      const huntable = a.huntable !== undefined ? a.huntable : (a.question.answer === 0);
+      correctAns = huntable ? `${a.question.name}（狩猟鳥獣）` : `非狩猟鳥獣（${a.question.name}）`;
     } else {
       yourAns = labels[a.selected];
       correctAns = labels[a.question.answer];
